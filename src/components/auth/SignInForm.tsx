@@ -5,10 +5,31 @@ import Label from "../form/Label";
 import Input from "../form/input/InputField";
 import Checkbox from "../form/input/Checkbox";
 import Button from "../ui/button/Button";
+import { useAppDispatch } from "../../store/hook";
+import { LoginData, userLogin } from "../../store/authSlice";
 
 export default function SignInForm() {
+  const dispatch = useAppDispatch();
+  const [data, setData] = useState<LoginData>({
+    email: "",
+    password: "",
+  });
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setData({
+      ...data,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(data);
+    dispatch(userLogin(data as LoginData));
+  };
   return (
     <div className="flex flex-col flex-1">
       <div className="w-full max-w-md pt-10 mx-auto">
@@ -83,13 +104,17 @@ export default function SignInForm() {
                 </span>
               </div>
             </div>
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="space-y-6">
                 <div>
                   <Label>
                     Email <span className="text-error-500">*</span>{" "}
                   </Label>
-                  <Input placeholder="info@gmail.com" />
+                  <Input
+                    placeholder="info@gmail.com"
+                    name="email"
+                    onChange={handleChange}
+                  />
                 </div>
                 <div>
                   <Label>
@@ -99,6 +124,8 @@ export default function SignInForm() {
                     <Input
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter your password"
+                      name="password"
+                      onChange={handleChange}
                     />
                     <span
                       onClick={() => setShowPassword(!showPassword)}
@@ -127,7 +154,7 @@ export default function SignInForm() {
                   </Link>
                 </div>
                 <div>
-                  <Button className="w-full" size="sm">
+                  <Button className="w-full" size="sm" type="submit">
                     Sign in
                   </Button>
                 </div>

@@ -1,13 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "../../icons";
 import Label from "../form/Label";
 import Input from "../form/input/InputField";
 import Checkbox from "../form/input/Checkbox";
+import { RegisterData, userRegistration } from "../../store/authSlice";
+import { useAppDispatch } from "../../store/hook";
 
 export default function SignUpForm() {
+  const dispatch = useAppDispatch();
+  const [data, setData] = useState<RegisterData>({
+    username: "",
+    email: "",
+    password: "",
+  });
+
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setData({
+      ...data,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    dispatch(userRegistration(data as RegisterData));
+  };
   return (
     <div className="flex flex-col flex-1 w-full overflow-y-auto lg:w-1/2 no-scrollbar">
       <div className="w-full max-w-md mx-auto mb-5 sm:pt-10">
@@ -82,33 +104,19 @@ export default function SignUpForm() {
                 </span>
               </div>
             </div>
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="space-y-5">
-                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                  {/* <!-- First Name --> */}
-                  <div className="sm:col-span-1">
-                    <Label>
-                      First Name<span className="text-error-500">*</span>
-                    </Label>
-                    <Input
-                      type="text"
-                      id="fname"
-                      name="fname"
-                      placeholder="Enter your first name"
-                    />
-                  </div>
-                  {/* <!-- Last Name --> */}
-                  <div className="sm:col-span-1">
-                    <Label>
-                      Last Name<span className="text-error-500">*</span>
-                    </Label>
-                    <Input
-                      type="text"
-                      id="lname"
-                      name="lname"
-                      placeholder="Enter your last name"
-                    />
-                  </div>
+                <div>
+                  <Label>
+                    Username<span className="text-error-500">*</span>
+                  </Label>
+                  <Input
+                    onChange={handleChange}
+                    type="username"
+                    id="username"
+                    name="username"
+                    placeholder="Enter your username"
+                  />
                 </div>
                 {/* <!-- Email --> */}
                 <div>
@@ -117,6 +125,7 @@ export default function SignUpForm() {
                   </Label>
                   <Input
                     type="email"
+                    onChange={handleChange}
                     id="email"
                     name="email"
                     placeholder="Enter your email"
@@ -129,6 +138,8 @@ export default function SignUpForm() {
                   </Label>
                   <div className="relative">
                     <Input
+                      name="password"
+                      onChange={handleChange}
                       placeholder="Enter your password"
                       type={showPassword ? "text" : "password"}
                     />
@@ -164,7 +175,10 @@ export default function SignUpForm() {
                 </div>
                 {/* <!-- Button --> */}
                 <div>
-                  <button className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600">
+                  <button
+                    type="submit"
+                    className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
+                  >
                     Sign Up
                   </button>
                 </div>
