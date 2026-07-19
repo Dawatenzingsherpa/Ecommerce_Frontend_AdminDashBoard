@@ -1,18 +1,21 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router";
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "../../icons";
 import Label from "../form/Label";
 import Input from "../form/input/InputField";
 import Checkbox from "../form/input/Checkbox";
-import { RegisterData, userRegistration } from "../../store/authSlice";
+import { RegisterData } from "../../Types/AuthTypes";
+import { userRegistration } from "../../store/authSlice";
 import { useAppDispatch } from "../../store/hook";
 
 export default function SignUpForm() {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [data, setData] = useState<RegisterData>({
     username: "",
     email: "",
     password: "",
+    role: "admin",
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -29,6 +32,7 @@ export default function SignUpForm() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(userRegistration(data as RegisterData));
+    navigate("/signin");
   };
   return (
     <div className="flex flex-col flex-1 w-full overflow-y-auto lg:w-1/2 no-scrollbar">

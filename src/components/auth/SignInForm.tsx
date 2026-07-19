@@ -1,21 +1,30 @@
-import { useState } from "react";
-import { Link } from "react-router";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router";
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "../../icons";
 import Label from "../form/Label";
 import Input from "../form/input/InputField";
 import Checkbox from "../form/input/Checkbox";
 import Button from "../ui/button/Button";
-import { useAppDispatch } from "../../store/hook";
-import { LoginData, userLogin } from "../../store/authSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hook";
+import { userLogin } from "../../store/authSlice";
+import { LoginData, Status } from "../../Types/AuthTypes";
 
 export default function SignInForm() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { status } = useAppSelector((state) => state.auth);
   const [data, setData] = useState<LoginData>({
     email: "",
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+
+  useEffect(() => {
+    if (status === Status.SUCCESS) {
+      navigate("/");
+    }
+  }, [status, dispatch]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

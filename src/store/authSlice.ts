@@ -1,32 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppDispatch } from "./store";
-import axios from "axios";
-
-export interface RegisterData {
-  username: string;
-  password: string;
-  email: string;
-}
-
-export interface LoginData {
-  email: string;
-  password: string;
-}
-
-interface User extends RegisterData {
-  token: string;
-}
-
-export enum Status {
-  LOADING = "loading",
-  SUCCESS = "success",
-  ERROR = "error",
-}
-
-interface AuthState {
-  user: User;
-  status: Status;
-}
+import {
+  AuthState,
+  LoginData,
+  RegisterData,
+  Status,
+  User,
+} from "../Types/AuthTypes";
+import APIAuthenticated from "../http";
 
 const initialState: AuthState = {
   user: {} as User,
@@ -57,7 +38,7 @@ export function userRegistration(data: RegisterData) {
     dispatch(setStatus(Status.LOADING));
 
     try {
-      const response = await axios.post("http://localhost:3000/register", data);
+      const response = await APIAuthenticated.post("register", data);
       if (response) {
         dispatch(setStatus(Status.SUCCESS));
       } else {
@@ -74,7 +55,7 @@ export function userLogin(data: LoginData) {
     dispatch(setStatus(Status.LOADING));
 
     try {
-      const response = await axios.post("http://localhost:3000/login", data);
+      const response = await APIAuthenticated.post("login", data);
       if (response) {
         const token = response.data.data;
         dispatch(setStatus(Status.SUCCESS));
