@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, isAction, PayloadAction } from "@reduxjs/toolkit";
 import { AppDispatch } from "./store";
 import {
   AuthState,
@@ -27,10 +27,13 @@ const authSlice = createSlice({
     setToken(state: AuthState, action: PayloadAction<string>) {
       state.user.token = action.payload;
     },
+    resetStatus(state: AuthState) {
+      state.status = Status.LOADING;
+    },
   },
 });
 
-export const { setUser, setStatus, setToken } = authSlice.actions;
+export const { setUser, setStatus, setToken, resetStatus } = authSlice.actions;
 export default authSlice.reducer;
 
 export function userRegistration(data: RegisterData) {
