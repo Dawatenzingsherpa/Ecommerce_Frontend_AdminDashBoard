@@ -9,10 +9,10 @@ export interface User {
   updatedAt?: string;
 }
 export interface Category {
-  id: string;
+  id?: string;
   categoryName: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Product {
@@ -86,7 +86,7 @@ export interface OrderData {
   Payment: PaymentDetails;
   items: ItemDetail[];
   orderDetails?: OrderDetails[];
-  User : User
+  User: User;
 }
 
 export interface InitialState {

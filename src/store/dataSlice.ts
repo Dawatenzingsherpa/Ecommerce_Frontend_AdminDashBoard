@@ -110,3 +110,19 @@ export function fetchCategory() {
     }
   };
 }
+
+export function createCategory(category: Category) {
+  return async function createCategoryThunk(dispatch: AppDispatch) {
+    dispatch(setStatus(Status.LOADING));
+    try {
+      const response = await APIAuthenticated.post("admin/category", category);
+      if (response) {
+        dispatch(setStatus(Status.SUCCESS));
+      } else {
+        dispatch(setStatus(Status.ERROR));
+      }
+    } catch (error) {
+      dispatch(setStatus(Status.ERROR));
+    }
+  };
+}
