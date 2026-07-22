@@ -15,6 +15,7 @@ import {
   fetchProducts,
   fetchUsers,
 } from "../../../store/dataSlice";
+import { OrderStatus } from "../../../Types/DataTypes";
 
 export default function BasicTableOne() {
   const dispatch = useAppDispatch();
@@ -125,12 +126,12 @@ export default function BasicTableOne() {
 
                   {/* Joined */}
                   <TableCell className="px-5 py-4 text-theme-sm text-gray-500">
-                    {new Date(user.createdAt).toLocaleDateString()}
+                    {new Date(user.createdAt as string).toLocaleDateString()}
                   </TableCell>
 
                   {/* Updated */}
                   <TableCell className="px-5 py-4 text-theme-sm text-gray-500">
-                    {new Date(user.updatedAt).toLocaleDateString()}
+                    {new Date(user.updatedAt as string).toLocaleDateString()}
                   </TableCell>
 
                   {/* Actions */}
@@ -151,6 +152,7 @@ export default function BasicTableOne() {
           </Table>
         </div>
       </div>
+
       <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
         <div className="max-w-full overflow-x-auto">
           <Table>
@@ -279,6 +281,7 @@ export default function BasicTableOne() {
           </Table>
         </div>
       </div>
+
       <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
         <div className="max-w-full overflow-x-auto">
           <Table>
@@ -296,7 +299,14 @@ export default function BasicTableOne() {
                   isHeader
                   className="px-5 py-3 text-start font-medium text-gray-500 text-theme-xs dark:text-gray-400"
                 >
-                  Phone
+                  Username
+                </TableCell>
+
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 text-start font-medium text-gray-500 text-theme-xs dark:text-gray-400"
+                >
+                  Phone Number
                 </TableCell>
 
                 <TableCell
@@ -310,12 +320,40 @@ export default function BasicTableOne() {
                   isHeader
                   className="px-5 py-3 text-start font-medium text-gray-500 text-theme-xs dark:text-gray-400"
                 >
-                  Payment
+                  Total Amount
                 </TableCell>
 
                 <TableCell
                   isHeader
                   className="px-5 py-3 text-start font-medium text-gray-500 text-theme-xs dark:text-gray-400"
+                >
+                  Payment ID
+                </TableCell>
+
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 text-start font-medium text-gray-500 text-theme-xs dark:text-gray-400"
+                >
+                  PIDX
+                </TableCell>
+
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 text-start font-medium text-gray-500 text-theme-xs dark:text-gray-400"
+                >
+                  Payment Method
+                </TableCell>
+
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 text-center font-medium text-gray-500 text-theme-xs dark:text-gray-400"
+                >
+                  Payment Status
+                </TableCell>
+
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 text-center font-medium text-gray-500 text-theme-xs dark:text-gray-400"
                 >
                   Order Status
                 </TableCell>
@@ -324,14 +362,21 @@ export default function BasicTableOne() {
                   isHeader
                   className="px-5 py-3 text-start font-medium text-gray-500 text-theme-xs dark:text-gray-400"
                 >
-                  Total
+                  Created
                 </TableCell>
 
                 <TableCell
                   isHeader
                   className="px-5 py-3 text-start font-medium text-gray-500 text-theme-xs dark:text-gray-400"
                 >
-                  Date
+                  Updated
+                </TableCell>
+
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 text-center font-medium text-gray-500 text-theme-xs dark:text-gray-400"
+                >
+                  Actions
                 </TableCell>
               </TableRow>
             </TableHeader>
@@ -339,16 +384,30 @@ export default function BasicTableOne() {
             {/* Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {orders.map((order) => (
-                <TableRow key={order.id}>
+                <TableRow
+                  key={order.id}
+                  className="hover:bg-gray-50 dark:hover:bg-white/[0.02]"
+                >
                   {/* Order ID */}
-                  <TableCell className="px-5 py-4 sm:px-6 text-start">
-                    <div>
-                      <p className="font-medium text-gray-800 dark:text-white">
-                        #{order.id}
-                      </p>
-                      <p className="text-theme-xs text-gray-500">
-                        {order.Payment.pidx}
-                      </p>
+                  <TableCell className="px-5 py-4 text-theme-sm text-gray-500">
+                    {order.id}
+                  </TableCell>
+
+                  {/* Username */}
+                  <TableCell className="px-5 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-600 dark:bg-blue-900/30">
+                        {order.User?.username?.charAt(0).toUpperCase()}
+                      </div>
+
+                      <div>
+                        <p className="font-medium text-gray-800 dark:text-white">
+                          {order.User?.username}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {order.User?.email}
+                        </p>
+                      </div>
                     </div>
                   </TableCell>
 
@@ -357,57 +416,84 @@ export default function BasicTableOne() {
                     {order.phoneNumber}
                   </TableCell>
 
-                  {/* Shipping */}
-                  <TableCell className="px-5 py-4 text-theme-sm text-gray-500 max-w-xs">
+                  {/* Shipping Address */}
+                  <TableCell className="px-5 py-4 text-theme-sm text-gray-500">
                     {order.shippingAddress}
                   </TableCell>
 
-                  {/* Payment */}
-                  <TableCell className="px-5 py-4">
-                    <div className="space-y-1">
-                      <p className="font-medium text-gray-800 dark:text-white">
-                        {order.Payment.paymentMethod}
-                      </p>
+                  {/* Total */}
+                  <TableCell className="px-5 py-4 font-medium text-gray-800 dark:text-white">
+                    Rs. {order.totalAmount}
+                  </TableCell>
 
-                      <Badge
-                        size="sm"
-                        color={
-                          order.Payment.paymentStatus === "paid"
-                            ? "success"
-                            : "error"
-                        }
-                      >
-                        {order.Payment.paymentStatus}
-                      </Badge>
-                    </div>
+                  {/* Payment ID */}
+                  <TableCell className="px-5 py-4 text-theme-sm text-gray-500">
+                    {order.paymentId}
+                  </TableCell>
+
+                  {/* PIDX */}
+                  <TableCell className="px-5 py-4 text-theme-sm text-gray-500">
+                    {order.Payment?.pidx}
+                  </TableCell>
+
+                  {/* Payment Method */}
+                  <TableCell className="px-5 py-4 text-theme-sm text-gray-500">
+                    {order.Payment?.paymentMethod}
+                  </TableCell>
+
+                  {/* Payment Status */}
+                  <TableCell className="px-5 py-4 text-center">
+                    <Badge
+                      color={
+                        order.Payment?.paymentStatus === "paid"
+                          ? "success"
+                          : "warning"
+                      }
+                      size="sm"
+                    >
+                      {order.Payment?.paymentStatus}
+                    </Badge>
                   </TableCell>
 
                   {/* Order Status */}
-                  <TableCell className="px-5 py-4">
+                  <TableCell className="px-5 py-4 text-center">
                     <Badge
-                      size="sm"
                       color={
-                        order.orderStatus === "delivered"
+                        order.orderStatus === OrderStatus.Delivered
                           ? "success"
-                          : order.orderStatus === "pending"
+                          : order.orderStatus === OrderStatus.Pending
                             ? "warning"
-                            : order.orderStatus === "cancelled"
+                            : order.orderStatus === OrderStatus.Cancelled
                               ? "error"
-                              : "primary"
+                              : "info"
                       }
+                      size="sm"
                     >
                       {order.orderStatus}
                     </Badge>
                   </TableCell>
 
-                  {/* Total */}
-                  <TableCell className="px-5 py-4 font-medium text-gray-800 dark:text-white">
-                    Rs. {order.totalAmount.toLocaleString()}
+                  {/* Created */}
+                  <TableCell className="px-5 py-4 text-theme-sm text-gray-500">
+                    {new Date(order.createdAt as string).toLocaleDateString()}
                   </TableCell>
 
-                  {/* Date */}
+                  {/* Updated */}
                   <TableCell className="px-5 py-4 text-theme-sm text-gray-500">
-                    {new Date(order?.createdAt as string).toLocaleDateString()}
+                    {new Date(order.updatedAt as string).toLocaleDateString()}
+                  </TableCell>
+
+                  {/* Actions */}
+                  <TableCell className="px-5 py-4">
+                    <div className="flex justify-center gap-2">
+                      <button className="rounded-lg bg-blue-500 px-3 py-1 text-sm text-white transition hover:bg-blue-600">
+                        Edit
+                      </button>
+
+                      <button className="rounded-lg bg-red-500 px-3 py-1 text-sm text-white transition hover:bg-red-600">
+                        Delete
+                      </button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
@@ -415,6 +501,7 @@ export default function BasicTableOne() {
           </Table>
         </div>
       </div>
+
       <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
         <div className="max-w-full overflow-x-auto">
           <Table>

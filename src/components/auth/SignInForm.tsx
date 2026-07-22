@@ -36,7 +36,6 @@ export default function SignInForm() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(data);
     dispatch(userLogin(data as LoginData));
   };
   return (

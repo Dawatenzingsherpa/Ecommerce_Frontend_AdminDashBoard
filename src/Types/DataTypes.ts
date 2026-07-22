@@ -4,9 +4,9 @@ export interface User {
   id: string;
   email: string;
   username: string;
-  role: "admin" | "customer";
-  createdAt: string;
-  updatedAt: string;
+  role?: "admin" | "customer";
+  createdAt?: string;
+  updatedAt?: string;
 }
 export interface Category {
   id: string;
@@ -86,6 +86,7 @@ export interface OrderData {
   Payment: PaymentDetails;
   items: ItemDetail[];
   orderDetails?: OrderDetails[];
+  User : User
 }
 
 export interface InitialState {
