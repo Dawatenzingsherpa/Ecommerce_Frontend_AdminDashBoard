@@ -9,4 +9,12 @@ const APIAuthenticated = axios.create({
   },
 });
 
+export const APIAuthForm = axios.create({
+  baseURL: "http://localhost:3000/",
+  headers: {
+    Accept: "application/json",
+    Authorization: `${localStorage.getItem("token")}`,
+  },
+});
+
 export default APIAuthenticated;

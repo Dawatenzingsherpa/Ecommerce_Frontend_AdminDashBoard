@@ -36,7 +36,7 @@ export default function BasicTableOne() {
   const { products, orders, categories, users } = useAppSelector(
     (state) => state.data,
   );
-  console.log(orders);
+
   useEffect(() => {
     dispatch(fetchProducts());
     dispatch(fetchOrders());

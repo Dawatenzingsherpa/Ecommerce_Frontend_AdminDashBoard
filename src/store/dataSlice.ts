@@ -12,7 +12,7 @@ import {
 } from "../Types/DataTypes";
 import { Status } from "../Types/AuthTypes";
 import { AppDispatch } from "./store";
-import APIAuthenticated from "../http";
+import APIAuthenticated, { APIAuthForm } from "../http";
 
 const initialState: InitialState = {
   products: [],
@@ -77,6 +77,9 @@ const dataSlice = createSlice({
         state.users.splice(index, 1);
       }
     },
+    setAddProduct(state: InitialState, action: PayloadAction<Product>) {
+      state.products.push(action.payload);
+    },
   },
 });
 
@@ -90,6 +93,7 @@ export const {
   setDeleteCategory,
   setDeleteOrder,
   setDeleteUser,
+  setAddProduct,
 } = dataSlice.actions;
 export default dataSlice.reducer;
 
@@ -238,6 +242,23 @@ export function deleteUser(userId: DeleteUser["userId"]) {
         dispatch(setStatus(Status.SUCCESS));
       } else {
         dispatch(setStatus(Status.ERROR));
+      }
+    } catch (error) {
+      dispatch(setStatus(Status.ERROR));
+    }
+  };
+}
+
+export function addProduct(data: FormData) {
+  return async function addProductThunk(dispatch: AppDispatch) {
+    dispatch(setStatus(Status.LOADING));
+    try {
+      const response = await APIAuthForm.post("admin/product", data);
+      if (response) {
+        dispatch(setAddProduct(response.data.data));
+        dispatch(setStatus(Status.SUCCESS));
+      } else {
+        setStatus(Status.ERROR);
       }
     } catch (error) {
       dispatch(setStatus(Status.ERROR));

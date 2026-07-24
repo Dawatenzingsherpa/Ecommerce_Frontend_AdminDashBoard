@@ -1,115 +1,146 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ComponentCard from "../../common/ComponentCard";
 import Label from "../Label";
 import Input from "../input/InputField";
 import Select from "../Select";
-import { EyeCloseIcon, EyeIcon, TimeIcon } from "../../../icons";
-import DatePicker from "../date-picker.tsx";
+import FileInput from "../input/FileInput.tsx";
+import { addProduct, fetchCategory } from "../../../store/dataSlice.ts";
+import { useAppDispatch, useAppSelector } from "../../../store/hook.ts";
 
-export default function DefaultInputs() {
-  const [showPassword, setShowPassword] = useState(false);
-  const options = [
-    { value: "marketing", label: "Marketing" },
-    { value: "template", label: "Template" },
-    { value: "development", label: "Development" },
-  ];
-  const handleSelectChange = (value: string) => {
-    console.log("Selected value:", value);
+export default function AddProductForm() {
+  const dispatch = useAppDispatch();
+  const { categories } = useAppSelector((state) => state.data);
+
+  useEffect(() => {
+    dispatch(fetchCategory());
+  }, [dispatch]);
+
+  const [formData, setFormData] = useState({
+    productName: "",
+    productPrice: "",
+    description: "",
+    productTotalStockQty: "",
+    categoryId: "",
+  });
+
+  const [productImage, setProductImage] = useState<File | null>(null);
+
+  const categoryOptions = categories.map((category) => ({
+    value: category.id as string,
+    label: category.categoryName,
+  }));
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleCategoryChange = (value: string) => {
+    setFormData({
+      ...formData,
+      categoryId: value,
+    });
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setProductImage(e.target.files[0]);
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const data = new FormData();
+
+    data.append("productName", formData.productName);
+    data.append("productPrice", formData.productPrice);
+    data.append("description", formData.description);
+    data.append("productTotalStockQty", formData.productTotalStockQty);
+    data.append("categoryId", formData.categoryId);
+
+    if (productImage) {
+      data.append("image", productImage);
+    }
+
+    dispatch(addProduct(data));
   };
 
   return (
-    <ComponentCard title="Default Inputs">
-      <div className="space-y-6">
+    <ComponentCard title="Add Product">
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <Label htmlFor="input">Input</Label>
-          <Input type="text" id="input" />
+          <Label>Product Name</Label>
+          <Input
+            type="text"
+            name="productName"
+            value={formData.productName}
+            onChange={handleChange}
+            placeholder="Enter product name"
+          />
         </div>
+
         <div>
-          <Label htmlFor="inputTwo">Input with Placeholder</Label>
-          <Input type="text" id="inputTwo" placeholder="info@gmail.com" />
+          <Label>Product Price</Label>
+          <Input
+            type="number"
+            name="productPrice"
+            value={formData.productPrice}
+            onChange={handleChange}
+            placeholder="Enter product price"
+          />
         </div>
+
         <div>
-          <Label>Select Input</Label>
+          <Label>Description</Label>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            rows={4}
+            className="w-full rounded-lg border border-gray-300 p-3"
+            placeholder="Enter description"
+          />
+        </div>
+
+        <div>
+          <Label>Total Stock Quantity</Label>
+          <Input
+            type="number"
+            name="productTotalStockQty"
+            value={formData.productTotalStockQty}
+            onChange={handleChange}
+            placeholder="Enter stock quantity"
+          />
+        </div>
+
+        <div>
+          <Label>Category</Label>
           <Select
-            options={options}
-            placeholder="Select an option"
-            onChange={handleSelectChange}
-            className="dark:bg-dark-900"
-          />
-        </div>
-        <div>
-          <Label>Password Input</Label>
-          <div className="relative">
-            <Input
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter your password"
-            />
-            <button
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
-            >
-              {showPassword ? (
-                <EyeIcon className="fill-gray-500 dark:fill-gray-400 size-5" />
-              ) : (
-                <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400 size-5" />
-              )}
-            </button>
-          </div>
-        </div>
-
-        <div>
-          <DatePicker
-            id="date-picker"
-            label="Date Picker Input"
-            placeholder="Select a date"
-            onChange={(dates, currentDateString) => {
-              // Handle your logic
-              console.log({ dates, currentDateString });
-            }}
+            options={categoryOptions}
+            placeholder="Select category"
+            onChange={handleCategoryChange}
           />
         </div>
 
         <div>
-          <Label htmlFor="tm">Time Picker Input</Label>
-          <div className="relative">
-            <Input
-              type="time"
-              id="tm"
-              name="tm"
-              onChange={(e) => console.log(e.target.value)}
-            />
-            <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
-              <TimeIcon className="size-6" />
-            </span>
-          </div>
+          <Label>Product Image</Label>
+
+          <FileInput onChange={handleFileChange} />
         </div>
-        <div>
-          <Label htmlFor="tm">Input with Payment</Label>
-          <div className="relative">
-            <Input
-              type="text"
-              placeholder="Card number"
-              className="pl-[62px]"
-            />
-            <span className="absolute left-0 top-1/2 flex h-11 w-[46px] -translate-y-1/2 items-center justify-center border-r border-gray-200 dark:border-gray-800">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle cx="6.25" cy="10" r="5.625" fill="#E80B26" />
-                <circle cx="13.75" cy="10" r="5.625" fill="#F59D31" />
-                <path
-                  d="M10 14.1924C11.1508 13.1625 11.875 11.6657 11.875 9.99979C11.875 8.33383 11.1508 6.8371 10 5.80713C8.84918 6.8371 8.125 8.33383 8.125 9.99979C8.125 11.6657 8.84918 13.1625 10 14.1924Z"
-                  fill="#FC6020"
-                />
-              </svg>
-            </span>
-          </div>
-        </div>
-      </div>
+
+        <button
+          type="submit"
+          className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+        >
+          Add Product
+        </button>
+      </form>
     </ComponentCard>
   );
 }
