@@ -10,24 +10,59 @@ import Badge from "../../ui/badge/Badge";
 import { useAppDispatch, useAppSelector } from "../../../store/hook";
 import { useEffect } from "react";
 import {
+  deleteCategory,
+  deleteOrder,
+  deleteProduct,
+  deleteUser,
   fetchCategory,
   fetchOrders,
   fetchProducts,
   fetchUsers,
+  setDeleteCategory,
+  setDeleteOrder,
+  setDeleteProduct,
+  setDeleteUser,
 } from "../../../store/dataSlice";
-import { OrderStatus } from "../../../Types/DataTypes";
+import {
+  DeleteCategory,
+  DeleteOrder,
+  DeleteProduct,
+  DeleteUser,
+  OrderStatus,
+} from "../../../Types/DataTypes";
 
 export default function BasicTableOne() {
   const dispatch = useAppDispatch();
   const { products, orders, categories, users } = useAppSelector(
     (state) => state.data,
   );
+  console.log(orders);
   useEffect(() => {
     dispatch(fetchProducts());
     dispatch(fetchOrders());
     dispatch(fetchCategory());
     dispatch(fetchUsers());
   }, [dispatch]);
+
+  const handleDeleteProduct = (productId: DeleteProduct["productId"]) => {
+    dispatch(setDeleteProduct({ productId }));
+    dispatch(deleteProduct(productId));
+  };
+
+  const handleDeleteCategory = (categoryId: DeleteCategory["categoryId"]) => {
+    dispatch(setDeleteCategory({ categoryId }));
+    dispatch(deleteCategory(categoryId));
+  };
+
+  const handleDeleteOrder = (orderId: DeleteOrder["orderId"]) => {
+    dispatch(setDeleteOrder({ orderId }));
+    dispatch(deleteOrder(orderId));
+  };
+
+  const handleDeleteUser = (userId: DeleteUser["userId"]) => {
+    dispatch(setDeleteUser({ userId }));
+    dispatch(deleteUser(userId));
+  };
 
   return (
     <>
@@ -110,7 +145,7 @@ export default function BasicTableOne() {
                   </TableCell>
 
                   {/* Role */}
-                  <TableCell className="px-5 py-4">
+                  <TableCell className="px-2 py-3">
                     <Badge
                       size="sm"
                       color={user.role === "admin" ? "primary" : "success"}
@@ -135,16 +170,23 @@ export default function BasicTableOne() {
                   </TableCell>
 
                   {/* Actions */}
-                  <TableCell className="px-5 py-4">
-                    <div className="flex justify-center gap-2">
-                      <button className="rounded-lg bg-blue-500 px-3 py-1 text-sm text-white transition hover:bg-blue-600">
-                        Edit
-                      </button>
+                  <TableCell className="px-2 py-3">
+                    {user.role === "customer" ? (
+                      <div className="flex justify-center gap-2">
+                        <button className="rounded-lg bg-blue-500 px-3 py-1 text-sm text-white transition hover:bg-blue-600">
+                          Edit
+                        </button>
 
-                      <button className="rounded-lg bg-red-500 px-3 py-1 text-sm text-white transition hover:bg-red-600">
-                        Delete
-                      </button>
-                    </div>
+                        <button
+                          className="rounded-lg bg-red-500 px-3 py-1 text-sm text-white transition hover:bg-red-600"
+                          onClick={() => handleDeleteUser(user.id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
@@ -243,7 +285,7 @@ export default function BasicTableOne() {
                   </TableCell>
 
                   {/* Stock */}
-                  <TableCell className="px-5 py-4">
+                  <TableCell className="px-2 py-3">
                     <Badge
                       size="sm"
                       color={
@@ -274,6 +316,22 @@ export default function BasicTableOne() {
                   {/* Created */}
                   <TableCell className="px-5 py-4 text-theme-sm text-gray-500">
                     {new Date(product?.createdAt).toLocaleDateString()}
+                  </TableCell>
+
+                  {/* Actions */}
+                  <TableCell className="px-2 py-3">
+                    <div className="flex justify-center gap-2">
+                      <button className="rounded-lg bg-blue-500 px-3 py-1 text-sm text-white transition hover:bg-blue-600">
+                        Edit
+                      </button>
+
+                      <button
+                        className="rounded-lg bg-red-500 px-3 py-1 text-sm text-white transition hover:bg-red-600"
+                        onClick={() => handleDeleteProduct(product?.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
@@ -394,7 +452,7 @@ export default function BasicTableOne() {
                   </TableCell>
 
                   {/* Username */}
-                  <TableCell className="px-5 py-4">
+                  <TableCell className="px-2 py-3">
                     <div className="flex items-center gap-3">
                       <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-600 dark:bg-blue-900/30">
                         {order.User?.username?.charAt(0).toUpperCase()}
@@ -484,13 +542,16 @@ export default function BasicTableOne() {
                   </TableCell>
 
                   {/* Actions */}
-                  <TableCell className="px-5 py-4">
+                  <TableCell className="px-2 py-3">
                     <div className="flex justify-center gap-2">
                       <button className="rounded-lg bg-blue-500 px-3 py-1 text-sm text-white transition hover:bg-blue-600">
                         Edit
                       </button>
 
-                      <button className="rounded-lg bg-red-500 px-3 py-1 text-sm text-white transition hover:bg-red-600">
+                      <button
+                        className="rounded-lg bg-red-500 px-3 py-1 text-sm text-white transition hover:bg-red-600"
+                        onClick={() => handleDeleteOrder(order?.id as string)}
+                      >
                         Delete
                       </button>
                     </div>
@@ -605,13 +666,18 @@ export default function BasicTableOne() {
                   </TableCell>
 
                   {/* Actions */}
-                  <TableCell className="px-5 py-4">
+                  <TableCell className="px-2 py-3">
                     <div className="flex justify-center gap-2">
                       <button className="rounded-lg bg-blue-500 px-3 py-1 text-sm text-white transition hover:bg-blue-600">
                         Edit
                       </button>
 
-                      <button className="rounded-lg bg-red-500 px-3 py-1 text-sm text-white transition hover:bg-red-600">
+                      <button
+                        className="rounded-lg bg-red-500 px-3 py-1 text-sm text-white transition hover:bg-red-600"
+                        onClick={() =>
+                          handleDeleteCategory(category?.id as string)
+                        }
+                      >
                         Delete
                       </button>
                     </div>

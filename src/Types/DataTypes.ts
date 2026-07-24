@@ -96,3 +96,16 @@ export interface InitialState {
   status: Status;
   categories: Category[];
 }
+
+export interface DeleteProduct {
+  productId: string;
+}
+export interface DeleteUser {
+  userId: string;
+}
+export interface DeleteOrder {
+  orderId: string;
+}
+export interface DeleteCategory {
+  categoryId: string;
+}
