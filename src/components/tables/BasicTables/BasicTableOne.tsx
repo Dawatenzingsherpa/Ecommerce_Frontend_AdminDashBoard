@@ -30,6 +30,7 @@ import {
   DeleteUser,
   OrderStatus,
 } from "../../../Types/DataTypes";
+import { Link } from "react-router";
 
 export default function BasicTableOne() {
   const dispatch = useAppDispatch();
@@ -383,34 +384,6 @@ export default function BasicTableOne() {
 
                 <TableCell
                   isHeader
-                  className="px-5 py-3 text-start font-medium text-gray-500 text-theme-xs dark:text-gray-400"
-                >
-                  Payment ID
-                </TableCell>
-
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 text-start font-medium text-gray-500 text-theme-xs dark:text-gray-400"
-                >
-                  PIDX
-                </TableCell>
-
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 text-start font-medium text-gray-500 text-theme-xs dark:text-gray-400"
-                >
-                  Payment Method
-                </TableCell>
-
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 text-center font-medium text-gray-500 text-theme-xs dark:text-gray-400"
-                >
-                  Payment Status
-                </TableCell>
-
-                <TableCell
-                  isHeader
                   className="px-5 py-3 text-center font-medium text-gray-500 text-theme-xs dark:text-gray-400"
                 >
                   Order Status
@@ -448,7 +421,7 @@ export default function BasicTableOne() {
                 >
                   {/* Order ID */}
                   <TableCell className="px-5 py-4 text-theme-sm text-gray-500">
-                    {order.id}
+                    <Link to={`order/${order?.id}`}>{order.id}</Link>
                   </TableCell>
 
                   {/* Username */}
@@ -482,35 +455,6 @@ export default function BasicTableOne() {
                   {/* Total */}
                   <TableCell className="px-5 py-4 font-medium text-gray-800 dark:text-white">
                     Rs. {order.totalAmount}
-                  </TableCell>
-
-                  {/* Payment ID */}
-                  <TableCell className="px-5 py-4 text-theme-sm text-gray-500">
-                    {order.paymentId}
-                  </TableCell>
-
-                  {/* PIDX */}
-                  <TableCell className="px-5 py-4 text-theme-sm text-gray-500">
-                    {order.Payment?.pidx}
-                  </TableCell>
-
-                  {/* Payment Method */}
-                  <TableCell className="px-5 py-4 text-theme-sm text-gray-500">
-                    {order.Payment?.paymentMethod}
-                  </TableCell>
-
-                  {/* Payment Status */}
-                  <TableCell className="px-5 py-4 text-center">
-                    <Badge
-                      color={
-                        order.Payment?.paymentStatus === "paid"
-                          ? "success"
-                          : "warning"
-                      }
-                      size="sm"
-                    >
-                      {order.Payment?.paymentStatus}
-                    </Badge>
                   </TableCell>
 
                   {/* Order Status */}
@@ -617,7 +561,7 @@ export default function BasicTableOne() {
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {categories.map((category) => (
                 <TableRow
-                  key={category.id}
+                  key={category?.id}
                   className="hover:bg-gray-50 dark:hover:bg-white/[0.02]"
                 >
                   {/* Category */}
@@ -629,7 +573,7 @@ export default function BasicTableOne() {
 
                       <div>
                         <p className="font-medium text-gray-800 dark:text-white">
-                          {category.categoryName}
+                          {category?.categoryName}
                         </p>
 
                         <p className="text-theme-xs text-gray-500">

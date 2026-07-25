@@ -85,7 +85,7 @@ export interface OrderData {
   updatedAt?: string;
   Payment: PaymentDetails;
   items: ItemDetail[];
-  orderDetails?: OrderDetails[];
+  OrderDetails?: OrderDetails[];
   User: User;
 }
 
@@ -95,6 +95,7 @@ export interface InitialState {
   users: User[];
   status: Status;
   categories: Category[];
+  singleOrder : OrderData
 }
 
 export interface DeleteProduct {

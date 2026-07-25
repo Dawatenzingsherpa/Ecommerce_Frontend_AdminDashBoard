@@ -9,6 +9,8 @@ import {
   Product,
   User,
   DeleteUser,
+  OrderStatus,
+  PaymentStatus,
 } from "../Types/DataTypes";
 import { Status } from "../Types/AuthTypes";
 import { AppDispatch } from "./store";
@@ -19,6 +21,7 @@ const initialState: InitialState = {
   orders: [],
   categories: [],
   users: [],
+  singleOrder : {} as OrderData,
   status: Status.LOADING,
 };
 
@@ -48,16 +51,22 @@ const dataSlice = createSlice({
       const index = state.products.findIndex(
         (item) => (item.id = action.payload.productId),
       );
-      state.products.splice(index, 1);
+
+      if (index !== -1) {
+        state.products.splice(index, 1);
+      }
     },
     setDeleteCategory(
       state: InitialState,
       action: PayloadAction<DeleteCategory>,
     ) {
       const index = state.categories.findIndex(
-        (item) => (item.id = action.payload.categoryId),
+        (item) => item.id === action.payload.categoryId,
       );
-      state.categories.splice(index, 1);
+
+      if (index !== -1) {
+        state.categories.splice(index, 1);
+      }
     },
     setDeleteOrder(state: InitialState, action: PayloadAction<DeleteOrder>) {
       const index = state.orders.findIndex(
@@ -80,6 +89,12 @@ const dataSlice = createSlice({
     setAddProduct(state: InitialState, action: PayloadAction<Product>) {
       state.products.push(action.payload);
     },
+    setAddCategory(state: InitialState, action: PayloadAction<Category>) {
+      state.categories.push(action.payload);
+    },
+    setSingleOrder(state:InitialState,action:PayloadAction<OrderData>){
+      state.singleOrder = action.payload
+    }
   },
 });
 
@@ -94,6 +109,8 @@ export const {
   setDeleteOrder,
   setDeleteUser,
   setAddProduct,
+  setAddCategory,
+  setSingleOrder
 } = dataSlice.actions;
 export default dataSlice.reducer;
 
@@ -171,6 +188,7 @@ export function createCategory(category: Category) {
     try {
       const response = await APIAuthenticated.post("admin/category", category);
       if (response) {
+        dispatch(setAddCategory(response.data.data));
         dispatch(setStatus(Status.SUCCESS));
       } else {
         dispatch(setStatus(Status.ERROR));
@@ -259,6 +277,60 @@ export function addProduct(data: FormData) {
         dispatch(setStatus(Status.SUCCESS));
       } else {
         setStatus(Status.ERROR);
+      }
+    } catch (error) {
+      dispatch(setStatus(Status.ERROR));
+    }
+  };
+}
+
+export function fetchSingleOrder(id : string) {
+  return async function fetchSingleThunk(dispatch: AppDispatch) {
+    dispatch(setStatus(Status.LOADING));
+    try {
+      const response = await APIAuthenticated.get(`order/admin/${id}`);
+      if (response) {
+        dispatch(setSingleOrder(response.data.data));
+        dispatch(setStatus(Status.SUCCESS));
+      } else {
+        dispatch(setStatus(Status.ERROR));
+      }
+    } catch (error) {
+      dispatch(setStatus(Status.ERROR));
+    }
+  };
+}
+
+
+
+export function changeOrderStatus(id : string,orderStatus:OrderStatus) {
+  return async function changeOrderStatusThunk(dispatch: AppDispatch) {
+    dispatch(setStatus(Status.LOADING));
+    try {
+      const response = await APIAuthenticated.patch(`order/admin/${id}`,{orderStatus});
+      if (response) {
+        
+        dispatch(setStatus(Status.SUCCESS));
+      } else {
+        dispatch(setStatus(Status.ERROR));
+      }
+    } catch (error) {
+      dispatch(setStatus(Status.ERROR));
+    }
+  };
+}
+
+
+export function changePaymentStatus(id : string,paymentStatus:PaymentStatus) {
+  return async function changePaymentStatusThunk(dispatch: AppDispatch) {
+    dispatch(setStatus(Status.LOADING));
+    try {
+      const response = await APIAuthenticated.patch(`order/admin/payment/${id}`,{paymentStatus});
+      if (response) {
+        
+        dispatch(setStatus(Status.SUCCESS));
+      } else {
+        dispatch(setStatus(Status.ERROR));
       }
     } catch (error) {
       dispatch(setStatus(Status.ERROR));

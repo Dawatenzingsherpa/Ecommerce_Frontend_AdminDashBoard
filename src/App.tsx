@@ -19,6 +19,7 @@ import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
 import CategoryForm from "./pages/Forms/CategoryForm";
+import OrderSingle from "./pages/Orders/OrderSingle";
 
 export default function App() {
   return (
@@ -34,6 +35,7 @@ export default function App() {
             <Route path="/profile" element={<UserProfiles />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/blank" element={<Blank />} />
+            <Route path="/basic-tables/order/:id" element={<OrderSingle />} />
 
             {/* Forms */}
             <Route path="/form-elements" element={<FormElements />} />
