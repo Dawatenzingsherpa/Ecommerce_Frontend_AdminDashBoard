@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hook";
 import { ChangeEvent, useEffect } from "react";
 import { changeOrderStatus, changePaymentStatus, deleteOrder, fetchSingleOrder, setDeleteOrder } from "../../store/dataSlice";
 import { DeleteOrder, OrderStatus, PaymentStatus } from "../../Types/DataTypes";
+import { socket } from "../../App";
 
 const OrderSingle = () => {
   const { id } = useParams();
@@ -17,7 +18,12 @@ const OrderSingle = () => {
   const handleOrderStatus= (e:ChangeEvent<HTMLSelectElement>)=>{
     const {value} = e.target
     if(id)
-    dispatch(changeOrderStatus(id,value as OrderStatus))
+      socket.emit("updatedOrderStatus",{
+        status : value,
+        userId : singleOrder?.User?.id,
+        orderId : id
+      })
+    dispatch(changeOrderStatus(id as string,value as OrderStatus))
   }
 
   const handlePaymentStatus= (e:ChangeEvent<HTMLSelectElement>)=>{
