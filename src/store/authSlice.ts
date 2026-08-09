@@ -1,4 +1,4 @@
-import { createSlice, isAction, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppDispatch } from "./store";
 import {
   AuthState,
