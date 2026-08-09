@@ -34,9 +34,19 @@ import { Link } from "react-router";
 
 export default function BasicTableOne() {
   const dispatch = useAppDispatch();
-  const { products, orders, categories, users } = useAppSelector(
+  const { products, orders, categories, users, searchItem } = useAppSelector(
     (state) => state.data,
   );
+
+  const filteredProducts = products.filter((product) => {
+    const search = searchItem.toLowerCase();
+
+    return (
+      product.productName.toLowerCase().includes(search) ||
+      product.description?.toLowerCase().includes(search) ||
+      product.Category?.categoryName.toLowerCase().includes(search)
+    );
+  });
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -248,7 +258,7 @@ export default function BasicTableOne() {
 
             {/* Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {products.map((product) => (
+              {filteredProducts.map((product) => (
                 <TableRow key={product?.id}>
                   {/* Product */}
                   <TableCell className="px-5 py-4 sm:px-6 text-start">

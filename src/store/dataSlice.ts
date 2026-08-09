@@ -21,7 +21,8 @@ const initialState: InitialState = {
   orders: [],
   categories: [],
   users: [],
-  singleOrder : {} as OrderData,
+  singleOrder: {} as OrderData,
+  searchItem: "",
   status: Status.LOADING,
 };
 
@@ -49,7 +50,7 @@ const dataSlice = createSlice({
       action: PayloadAction<DeleteProduct>,
     ) {
       const index = state.products.findIndex(
-        (item) => (item.id = action.payload.productId),
+        (item) => item.id === action.payload.productId,
       );
 
       if (index !== -1) {
@@ -92,15 +93,19 @@ const dataSlice = createSlice({
     setAddCategory(state: InitialState, action: PayloadAction<Category>) {
       state.categories.push(action.payload);
     },
-    setSingleOrder(state:InitialState,action:PayloadAction<OrderData>){
-      state.singleOrder = action.payload
-    }
+    setSingleOrder(state: InitialState, action: PayloadAction<OrderData>) {
+      state.singleOrder = action.payload;
+    },
+    setSearchItem(state: InitialState, action: PayloadAction<string>) {
+      state.searchItem = action.payload;
+    },
   },
 });
 
 export const {
   setStatus,
   setProducts,
+  setSearchItem,
   setOrders,
   setUsers,
   setCategories,
@@ -110,7 +115,7 @@ export const {
   setDeleteUser,
   setAddProduct,
   setAddCategory,
-  setSingleOrder
+  setSingleOrder,
 } = dataSlice.actions;
 export default dataSlice.reducer;
 
@@ -284,7 +289,7 @@ export function addProduct(data: FormData) {
   };
 }
 
-export function fetchSingleOrder(id : string) {
+export function fetchSingleOrder(id: string) {
   return async function fetchSingleThunk(dispatch: AppDispatch) {
     dispatch(setStatus(Status.LOADING));
     try {
@@ -301,15 +306,14 @@ export function fetchSingleOrder(id : string) {
   };
 }
 
-
-
-export function changeOrderStatus(id : string,orderStatus:OrderStatus) {
+export function changeOrderStatus(id: string, orderStatus: OrderStatus) {
   return async function changeOrderStatusThunk(dispatch: AppDispatch) {
     dispatch(setStatus(Status.LOADING));
     try {
-      const response = await APIAuthenticated.patch(`order/admin/${id}`,{orderStatus});
+      const response = await APIAuthenticated.patch(`order/admin/${id}`, {
+        orderStatus,
+      });
       if (response) {
-        
         dispatch(setStatus(Status.SUCCESS));
       } else {
         dispatch(setStatus(Status.ERROR));
@@ -320,14 +324,15 @@ export function changeOrderStatus(id : string,orderStatus:OrderStatus) {
   };
 }
 
-
-export function changePaymentStatus(id : string,paymentStatus:PaymentStatus) {
+export function changePaymentStatus(id: string, paymentStatus: PaymentStatus) {
   return async function changePaymentStatusThunk(dispatch: AppDispatch) {
     dispatch(setStatus(Status.LOADING));
     try {
-      const response = await APIAuthenticated.patch(`order/admin/payment/${id}`,{paymentStatus});
+      const response = await APIAuthenticated.patch(
+        `order/admin/payment/${id}`,
+        { paymentStatus },
+      );
       if (response) {
-        
         dispatch(setStatus(Status.SUCCESS));
       } else {
         dispatch(setStatus(Status.ERROR));

@@ -95,7 +95,8 @@ export interface InitialState {
   users: User[];
   status: Status;
   categories: Category[];
-  singleOrder : OrderData
+  singleOrder: OrderData;
+  searchItem: string;
 }
 
 export interface DeleteProduct {
