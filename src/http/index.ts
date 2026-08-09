@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const APIAuthenticated = axios.create({
-  baseURL: "http://localhost:3000/",
+  baseURL: "https://project2backend-f2fx.onrender.com/",
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
@@ -10,7 +10,7 @@ const APIAuthenticated = axios.create({
 });
 
 export const APIAuthForm = axios.create({
-  baseURL: "http://localhost:3000/",
+  baseURL: "https://project2backend-f2fx.onrender.com/",
   headers: {
     Accept: "application/json",
     Authorization: `${localStorage.getItem("token")}`,
