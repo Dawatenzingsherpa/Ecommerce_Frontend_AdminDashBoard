@@ -20,15 +20,15 @@ import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
 import CategoryForm from "./pages/Forms/CategoryForm";
 import OrderSingle from "./pages/Orders/OrderSingle";
-import {io} from 'socket.io-client'
+import { io } from "socket.io-client";
 
-export const socket = io("http://localhost:3000",{auth : {
-  token : localStorage.getItem("token")
-}})
+export const socket = io("https://project2backend-f2fx.onrender.com/", {
+  auth: {
+    token: localStorage.getItem("token"),
+  },
+});
 
 export default function App() {
-  
-
   return (
     <>
       <Router>
