@@ -42,9 +42,9 @@ export default function BasicTableOne() {
     const search = searchItem.toLowerCase();
 
     return (
-      product.productName.toLowerCase().includes(search) ||
-      product.description?.toLowerCase().includes(search) ||
-      product.Category?.categoryName.toLowerCase().includes(search)
+      product?.productName.toLowerCase().includes(search) ||
+      product?.description?.toLowerCase().includes(search) ||
+      product?.Category?.categoryName.toLowerCase().includes(search)
     );
   });
 
@@ -131,7 +131,7 @@ export default function BasicTableOne() {
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {users.map((user) => (
                 <TableRow
-                  key={user.id}
+                  key={user?.id}
                   className="hover:bg-gray-50 dark:hover:bg-white/[0.02]"
                 >
                   {/* User */}
@@ -139,17 +139,17 @@ export default function BasicTableOne() {
                     <div className="flex items-center gap-3">
                       {/* Avatar */}
                       <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-100 font-semibold text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-300">
-                        {user.username.charAt(0).toUpperCase()}
+                        {user?.username?.charAt(0).toUpperCase()}
                       </div>
 
                       {/* User Info */}
                       <div>
                         <p className="font-medium text-gray-800 dark:text-white">
-                          {user.username}
+                          {user?.username}
                         </p>
 
                         <p className="text-theme-xs text-gray-500">
-                          {user.email}
+                          {user?.email}
                         </p>
                       </div>
                     </div>
@@ -159,30 +159,30 @@ export default function BasicTableOne() {
                   <TableCell className="px-2 py-3">
                     <Badge
                       size="sm"
-                      color={user.role === "admin" ? "primary" : "success"}
+                      color={user?.role === "admin" ? "primary" : "success"}
                     >
-                      {user.role}
+                      {user?.role}
                     </Badge>
                   </TableCell>
 
                   {/* User ID */}
                   <TableCell className="px-5 py-4 text-theme-sm text-gray-500">
-                    {user.id.slice(0, 8)}...
+                    {user?.id.slice(0, 8)}...
                   </TableCell>
 
                   {/* Joined */}
                   <TableCell className="px-5 py-4 text-theme-sm text-gray-500">
-                    {new Date(user.createdAt as string).toLocaleDateString()}
+                    {new Date(user?.createdAt as string).toLocaleDateString()}
                   </TableCell>
 
                   {/* Updated */}
                   <TableCell className="px-5 py-4 text-theme-sm text-gray-500">
-                    {new Date(user.updatedAt as string).toLocaleDateString()}
+                    {new Date(user?.updatedAt as string).toLocaleDateString()}
                   </TableCell>
 
                   {/* Actions */}
                   <TableCell className="px-2 py-3">
-                    {user.role === "customer" ? (
+                    {user?.role === "customer" ? (
                       <div className="flex justify-center gap-2">
                         <button className="rounded-lg bg-blue-500 px-3 py-1 text-sm text-white transition hover:bg-blue-600">
                           Edit
@@ -190,7 +190,7 @@ export default function BasicTableOne() {
 
                         <button
                           className="rounded-lg bg-red-500 px-3 py-1 text-sm text-white transition hover:bg-red-600"
-                          onClick={() => handleDeleteUser(user.id)}
+                          onClick={() => handleDeleteUser(user?.id)}
                         >
                           Delete
                         </button>
@@ -286,7 +286,7 @@ export default function BasicTableOne() {
                   {/* Category */}
                   <TableCell className="px-5 py-4 text-theme-sm text-gray-500">
                     <Badge size="sm" color="primary">
-                      {product?.Category.categoryName}
+                      {product?.Category?.categoryName}
                     </Badge>
                   </TableCell>
 
@@ -315,11 +315,11 @@ export default function BasicTableOne() {
                   <TableCell className="px-5 py-4 text-theme-sm">
                     <div>
                       <p className="font-medium text-gray-800 dark:text-white">
-                        {product?.User.username}
+                        {product?.User?.username}
                       </p>
 
                       <p className="text-gray-500 text-theme-xs">
-                        {product?.User.email}
+                        {product?.User?.email}
                       </p>
                     </div>
                   </TableCell>
@@ -426,27 +426,27 @@ export default function BasicTableOne() {
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {orders.map((order) => (
                 <TableRow
-                  key={order.id}
+                  key={order?.id}
                   className="hover:bg-gray-50 dark:hover:bg-white/[0.02]"
                 >
                   {/* Order ID */}
                   <TableCell className="px-5 py-4 text-theme-sm text-gray-500">
-                    <Link to={`order/${order?.id}`}>{order.id}</Link>
+                    <Link to={`order/${order?.id}`}>{order?.id}</Link>
                   </TableCell>
 
                   {/* Username */}
                   <TableCell className="px-2 py-3">
                     <div className="flex items-center gap-3">
                       <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-600 dark:bg-blue-900/30">
-                        {order.User?.username?.charAt(0).toUpperCase()}
+                        {order?.User?.username?.charAt(0).toUpperCase()}
                       </div>
 
                       <div>
                         <p className="font-medium text-gray-800 dark:text-white">
-                          {order.User?.username}
+                          {order?.User?.username}
                         </p>
                         <p className="text-xs text-gray-500">
-                          {order.User?.email}
+                          {order?.User?.email}
                         </p>
                       </div>
                     </div>
@@ -454,45 +454,45 @@ export default function BasicTableOne() {
 
                   {/* Phone */}
                   <TableCell className="px-5 py-4 text-theme-sm text-gray-500">
-                    {order.phoneNumber}
+                    {order?.phoneNumber}
                   </TableCell>
 
                   {/* Shipping Address */}
                   <TableCell className="px-5 py-4 text-theme-sm text-gray-500">
-                    {order.shippingAddress}
+                    {order?.shippingAddress}
                   </TableCell>
 
                   {/* Total */}
                   <TableCell className="px-5 py-4 font-medium text-gray-800 dark:text-white">
-                    Rs. {order.totalAmount}
+                    Rs. {order?.totalAmount}
                   </TableCell>
 
                   {/* Order Status */}
                   <TableCell className="px-5 py-4 text-center">
                     <Badge
                       color={
-                        order.orderStatus === OrderStatus.Delivered
+                        order?.orderStatus === OrderStatus.Delivered
                           ? "success"
-                          : order.orderStatus === OrderStatus.Pending
+                          : order?.orderStatus === OrderStatus.Pending
                             ? "warning"
-                            : order.orderStatus === OrderStatus.Cancelled
+                            : order?.orderStatus === OrderStatus.Cancelled
                               ? "error"
                               : "info"
                       }
                       size="sm"
                     >
-                      {order.orderStatus}
+                      {order?.orderStatus}
                     </Badge>
                   </TableCell>
 
                   {/* Created */}
                   <TableCell className="px-5 py-4 text-theme-sm text-gray-500">
-                    {new Date(order.createdAt as string).toLocaleDateString()}
+                    {new Date(order?.createdAt as string).toLocaleDateString()}
                   </TableCell>
 
                   {/* Updated */}
                   <TableCell className="px-5 py-4 text-theme-sm text-gray-500">
-                    {new Date(order.updatedAt as string).toLocaleDateString()}
+                    {new Date(order?.updatedAt as string).toLocaleDateString()}
                   </TableCell>
 
                   {/* Actions */}
