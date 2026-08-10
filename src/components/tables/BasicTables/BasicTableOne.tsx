@@ -183,18 +183,12 @@ export default function BasicTableOne() {
                   {/* Actions */}
                   <TableCell className="px-2 py-3">
                     {user?.role === "customer" ? (
-                      <div className="flex justify-center gap-2">
-                        <button className="rounded-lg bg-blue-500 px-3 py-1 text-sm text-white transition hover:bg-blue-600">
-                          Edit
-                        </button>
-
-                        <button
-                          className="rounded-lg bg-red-500 px-3 py-1 text-sm text-white transition hover:bg-red-600"
-                          onClick={() => handleDeleteUser(user?.id)}
-                        >
-                          Delete
-                        </button>
-                      </div>
+                      <button
+                        className="rounded-lg bg-red-500 px-3 py-1 text-sm text-white transition hover:bg-red-600"
+                        onClick={() => handleDeleteUser(user?.id)}
+                      >
+                        Delete
+                      </button>
                     ) : (
                       ""
                     )}
@@ -332,10 +326,6 @@ export default function BasicTableOne() {
                   {/* Actions */}
                   <TableCell className="px-2 py-3">
                     <div className="flex justify-center gap-2">
-                      <button className="rounded-lg bg-blue-500 px-3 py-1 text-sm text-white transition hover:bg-blue-600">
-                        Edit
-                      </button>
-
                       <button
                         className="rounded-lg bg-red-500 px-3 py-1 text-sm text-white transition hover:bg-red-600"
                         onClick={() => handleDeleteProduct(product?.id)}
@@ -498,9 +488,11 @@ export default function BasicTableOne() {
                   {/* Actions */}
                   <TableCell className="px-2 py-3">
                     <div className="flex justify-center gap-2">
-                      <button className="rounded-lg bg-blue-500 px-3 py-1 text-sm text-white transition hover:bg-blue-600">
-                        Edit
-                      </button>
+                      <Link to={`order/${order?.id}`}>
+                        <button className="rounded-lg bg-red-500 px-3 py-1 text-sm text-white transition hover:bg-red-600">
+                          Edit
+                        </button>
+                      </Link>
 
                       <button
                         className="rounded-lg bg-red-500 px-3 py-1 text-sm text-white transition hover:bg-red-600"
@@ -622,10 +614,6 @@ export default function BasicTableOne() {
                   {/* Actions */}
                   <TableCell className="px-2 py-3">
                     <div className="flex justify-center gap-2">
-                      <button className="rounded-lg bg-blue-500 px-3 py-1 text-sm text-white transition hover:bg-blue-600">
-                        Edit
-                      </button>
-
                       <button
                         className="rounded-lg bg-red-500 px-3 py-1 text-sm text-white transition hover:bg-red-600"
                         onClick={() =>
